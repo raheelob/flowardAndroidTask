@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull
 
 @Entity
 @Parcelize
-data class UserDetailData(
+data class UserPostsData(
     @SerializedName("userId") var userId: Int? = null,
     @PrimaryKey
     @NotNull

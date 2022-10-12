@@ -15,14 +15,13 @@ class UserUseCase @Inject constructor(private val userRepository: UserRepository
         )
     }
 
-
     data class Params constructor(
-        val fetchLocal: Boolean
+        val fetchLocal: Boolean?,
     ) {
         companion object {
             fun create(
-                fetchLocal: Boolean
-            ) = Params(fetchLocal)
+                fetchLocal: Boolean?,
+            ) = Params(fetchLocal = fetchLocal)
         }
     }
 }

@@ -2,26 +2,53 @@ package com.floward.androidtask.data.local
 
 import androidx.room.*
 import com.floward.androidtask.data.response.model.UserData
+import com.floward.androidtask.data.response.model.UserPostsData
 
 @Dao
 interface UserDao {
-    //Add a single top story...
+    /*
+    * crud for user data...
+    * */
+    //Add a single user data...
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleUserData(data: UserData)
 
-    //Add a single top story...
+    //Add a single user data...
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllUserData(list:List<UserData>)
 
-    // deletes single top story...
+    // deletes single user data...
     @Delete
     suspend fun deleteSingleUserData(data: UserData)
 
-    //Get all the top stories...
+    //Get all the user data...
     @Query("Select * from UserData")
     fun getAllUserData(): List<UserData>
 
-    //Delete all the top stories...
+    //Delete all the user data...
     @Query("DELETE FROM UserData")
     fun deleteAllUserData()
+
+    /*
+   * crud for user posts...
+   * */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSingleUserPost(data: UserPostsData)
+
+    //Add a single user post...
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllUserPostsData(list:List<UserPostsData>)
+
+    // deletes single user post...
+    @Delete
+    suspend fun deleteSingleUserData(data: UserPostsData)
+
+    //Get all the user post...
+    @Query("Select * from UserPostsData")
+    fun getAllUserPostsData(): List<UserPostsData>
+
+    //Delete all the user post...
+    @Query("DELETE FROM UserPostsData")
+    fun deleteAllUserPostsData()
+
 }

@@ -18,6 +18,6 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
     }
 
     override fun observeViewModel(viewModel: UserViewModel) {
-       
+
     }
 }
