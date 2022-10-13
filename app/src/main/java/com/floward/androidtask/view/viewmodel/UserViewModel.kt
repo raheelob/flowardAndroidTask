@@ -98,7 +98,7 @@ class UserViewModel @Inject constructor(
     /***********************************************************************************/
     public fun getPosts() = viewModelScope.launch {
         postsTasksEventChannel.send(PostDataEvent.Loading)
-        userPostsUseCase.execute(UserPostsUseCase.Params(fetchLocal = false, userId = "1")).collect{
+        userPostsUseCase.execute(UserPostsUseCase.Params(fetchLocal = true, userId = "1")).collect{
              response ->
                 when (response) {
                     RemoteData.Loading -> {

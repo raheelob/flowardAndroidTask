@@ -1,5 +1,6 @@
 package com.floward.androidtask.data.repository
 
+import android.util.Log
 import com.floward.androidtask.data.api.APIsCollection
 import com.floward.androidtask.data.api.RemoteData
 import com.floward.androidtask.data.local.UserDao
@@ -33,11 +34,10 @@ class UserRepositoryImpl @Inject constructor(
         userId: String,
     ): Flow<RemoteData<List<UserPostsData>>> = flow<RemoteData<List<UserPostsData>>> {
         if (fetchLocal) {
-            emit(RemoteData.Success((userDao.getAllUserPostsData())))
+            val data = userDao.getAllUserPostsData(userId)
+            emit(RemoteData.Success((data[0].userPostsData)))
         } else {
             val response = userAPI.getUserPost(userId = userId)
-            //first delete all the record and then update with a new record...
-            userDao.deleteAllUserPostsData()
             userDao.insertAllUserPostsData(response)
             emit(RemoteData.Success(response))
         }

@@ -1,6 +1,7 @@
 package com.floward.androidtask.data.local
 
 import androidx.room.*
+import com.floward.androidtask.data.response.model.UserAndTheirPostsData
 import com.floward.androidtask.data.response.model.UserData
 import com.floward.androidtask.data.response.model.UserPostsData
 
@@ -44,8 +45,9 @@ interface UserDao {
     suspend fun deleteSingleUserData(data: UserPostsData)
 
     //Get all the user post...
-    @Query("Select * from UserPostsData")
-    fun getAllUserPostsData(): List<UserPostsData>
+    @Transaction
+    @Query("Select * from UserData where userId = :userId")
+    fun getAllUserPostsData(userId : String): List<UserAndTheirPostsData>
 
     //Delete all the user post...
     @Query("DELETE FROM UserPostsData")
