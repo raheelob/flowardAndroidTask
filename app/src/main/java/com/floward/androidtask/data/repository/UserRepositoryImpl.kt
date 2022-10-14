@@ -34,8 +34,6 @@ class UserRepositoryImpl @Inject constructor(
         userId: String,
     ): Flow<RemoteData<List<UserPostsData>>> = flow<RemoteData<List<UserPostsData>>> {
         if (fetchLocal) {
-             Log.d("",""+userDao.getAllUserPostsData(userId))
-            Log.d("","")
             val data = userDao.getAllUserPostsData(userId)
             emit(RemoteData.Success((data[0].userPostsData)))
         } else {
