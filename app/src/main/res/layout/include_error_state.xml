@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="innerViewModel"
+            type="com.floward.androidtask.view.viewmodel.UserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivErrorIcon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_error" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvItemName"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:text="@string/error"
+            app:layout_constraintStart_toEndOf="@id/ivErrorIcon"
+            app:layout_constraintTop_toTopOf="@id/ivErrorIcon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:text="@string/some_thing_went_wrong_try_hitting_the_request_again"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvItemName"
+            app:layout_constraintTop_toBottomOf="@id/tvItemName"
+            tools:text="Something went wrong, please try again" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/retry"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@android:color/holo_red_dark"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvDescription"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
+       <!-- android:onClick="@{()->innerViewModel.getUserList()}"-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

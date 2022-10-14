@@ -50,7 +50,7 @@ class UserViewModel @Inject constructor(
 
     //remote // users event...
     /***********************************************************************************/
-    private fun getUserList() = viewModelScope.launch {
+     fun getUserList() = viewModelScope.launch {
         usersTasksEventChannel.send(UserDataEvent.Loading)
         userUseCase.execute(UserUseCase.Params(fetchLocal = false)).collect{ response ->
             when (response) {

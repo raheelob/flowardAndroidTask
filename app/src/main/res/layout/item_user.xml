@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.floward.androidtask.data.response.model.UserData" />
+
+        <variable
+            name="userItemClickListener"
+            type="com.floward.androidtask.view.adapter.UserListAdapter.UserListItemClickListener" />
+
+        <variable
+            name="position"
+            type="Integer" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        app:cardCornerRadius="10dp"
+        app:strokeColor="@color/purple_7005"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->userItemClickListener.onClick(data)}">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".02" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".95" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivTopStory"
+                app:layout_constraintStart_toStartOf="@+id/startGuideline"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvName"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="2"
+                    android:text="@{data.name}"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Title comes here..." />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPostsCount"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="2"
+                    android:text="@{data.albumId.toString()}"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    tools:text="Title comes here..." />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivTopStory"
+                imagePath="@{data.thumbnailUrl}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

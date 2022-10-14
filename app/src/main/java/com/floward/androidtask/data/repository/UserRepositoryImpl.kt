@@ -34,10 +34,14 @@ class UserRepositoryImpl @Inject constructor(
         userId: String,
     ): Flow<RemoteData<List<UserPostsData>>> = flow<RemoteData<List<UserPostsData>>> {
         if (fetchLocal) {
+             Log.d("",""+userDao.getAllUserPostsData(userId))
+            Log.d("","")
             val data = userDao.getAllUserPostsData(userId)
             emit(RemoteData.Success((data[0].userPostsData)))
         } else {
             val response = userAPI.getUserPost(userId = userId)
+            //first delete all the record and then update with a new record...
+//            userDao.deleteAllUserPostsData()
             userDao.insertAllUserPostsData(response)
             emit(RemoteData.Success(response))
         }

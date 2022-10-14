@@ -12,7 +12,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : Fragment() {
 
-    private lateinit var binding: VB
+    lateinit var binding: VB
     protected abstract val viewModel: VM
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
