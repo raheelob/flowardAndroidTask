@@ -46,8 +46,8 @@ interface UserDao {
 
     //Get all the user post...
     @Transaction
-    @Query("Select * from UserData where userId = :userId")
-    fun getAllUserPostsData(userId : String): List<UserAndTheirPostsData>
+    @Query("Select * from UserData")
+    fun getAllUserPostsData(): List<UserAndTheirPostsData>
 
     //Delete all the user post...
     @Query("DELETE FROM UserPostsData")

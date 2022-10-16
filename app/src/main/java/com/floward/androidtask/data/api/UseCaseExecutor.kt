@@ -32,4 +32,5 @@ abstract class UseCaseExecutor<in P, out R>() {
             }
         }
     }
+
 }

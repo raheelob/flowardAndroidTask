@@ -1,6 +1,7 @@
 package com.floward.androidtask.view.adapter
 
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.floward.androidtask.R
@@ -17,4 +18,18 @@ object BindingAdapters {
                 .into(appCompatImageView)
         }
     }
+
+    @BindingAdapter("setUserCount")
+    @JvmStatic
+    fun setUserCount(appCompatTextView: AppCompatTextView, count: Int?) {
+        count?.let {
+            appCompatTextView.text = buildString {
+                append("You have ")
+                append(count)
+                append(" posts")
+            }
+        }
+    }
+
+
 }

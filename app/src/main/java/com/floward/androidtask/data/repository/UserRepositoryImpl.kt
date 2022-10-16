@@ -2,8 +2,10 @@ package com.floward.androidtask.data.repository
 
 import android.util.Log
 import com.floward.androidtask.data.api.APIsCollection
+import com.floward.androidtask.data.api.LocalData
 import com.floward.androidtask.data.api.RemoteData
 import com.floward.androidtask.data.local.UserDao
+import com.floward.androidtask.data.response.model.UserAndTheirPostsData
 import com.floward.androidtask.data.response.model.UserData
 import com.floward.androidtask.data.response.model.UserPostsData
 import kotlinx.coroutines.Dispatchers
@@ -29,19 +31,16 @@ class UserRepositoryImpl @Inject constructor(
             }
         }.flowOn(Dispatchers.IO)
 
-    override fun getUserPosts(
-        fetchLocal: Boolean,
-        userId: String,
-    ): Flow<RemoteData<List<UserPostsData>>> = flow<RemoteData<List<UserPostsData>>> {
-        if (fetchLocal) {
-            val data = userDao.getAllUserPostsData(userId)
-            emit(RemoteData.Success((data[0].userPostsData)))
-        } else {
-            val response = userAPI.getUserPost(userId = userId)
+    override fun getAllPosts(): Flow<RemoteData<List<UserPostsData>>> = flow<RemoteData<List<UserPostsData>>> {
+            val response = userAPI.getUserPost()
             //first delete all the record and then update with a new record...
 //            userDao.deleteAllUserPostsData()
             userDao.insertAllUserPostsData(response)
             emit(RemoteData.Success(response))
-        }
+    }.flowOn(Dispatchers.IO)
+
+    override fun getUserAndTheirPost(): Flow<LocalData<List<UserAndTheirPostsData>>>  = flow<LocalData<List<UserAndTheirPostsData>>> {
+        val response = userDao.getAllUserPostsData()
+        emit((LocalData.SuccessFulRead( response)))
     }.flowOn(Dispatchers.IO)
 }

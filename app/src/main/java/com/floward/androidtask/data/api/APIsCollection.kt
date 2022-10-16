@@ -10,5 +10,5 @@ interface APIsCollection {
     suspend fun getUsersList(): List<UserData>
 
     @GET("posts")
-    suspend fun getUserPost(@Query("userId") userId: String?): List<UserPostsData>
+    suspend fun getUserPost(): List<UserPostsData>
 }

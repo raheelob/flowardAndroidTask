@@ -5,8 +5,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.floward.androidtask.data.response.model.UserData
+import com.floward.androidtask.data.events.PostDataEvent
+import com.floward.androidtask.data.events.UserAndTheirPostEvent
+import com.floward.androidtask.data.events.UserDataEvent
+import com.floward.androidtask.data.response.model.UserAndTheirPostsData
 import com.floward.androidtask.view.base.BaseFragment
 import com.floward.androidtask.databinding.FragmentUserListingBinding
 import com.floward.androidtask.utils.ProgressDialog
@@ -35,6 +40,10 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
         initRecyclerView()
         initAdapter()
         initSwipeToRefresh()
+        if (viewModel.getConfig()) {
+            viewModel.retrieveList()
+            viewModel.handleConfig(false)
+        }
     }
 
     private fun initRecyclerView() {
@@ -42,9 +51,11 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
         binding.userListLayout.rvUserList.adapter = mAdapter
     }
 
-    private fun onUserListItemClicked() = UserListAdapter.UserListItemClickListener{
-        it.let {
-
+    private fun onUserListItemClicked() = UserListAdapter.UserListItemClickListener {
+        it.let { data ->
+            viewModel.handleConfig(true)
+            val direction = UserListingFragmentDirections.actionUserListingFragmentToPostsFragment(data)
+            findNavController().navigate(direction)
         }
     }
 
@@ -61,54 +72,63 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
         }
     }
 
-    private fun manageUIState(viewNumber: Int, list: List<UserData>?) {
+    private fun manageUIState(viewNumber: Int, list: List<UserAndTheirPostsData>?) {
         binding.viewFlipper.displayedChild = viewNumber
         mAdapter.submitList(list)
     }
 
-    private fun inflateViewWithUserList(eventState: UserViewModel.UserDataEvent.GetUserList) {
+    private fun inflateViewWithUserList(eventState: UserAndTheirPostEvent.UserWithTheirPosts) {
         hideLoading()
         if (eventState.list.isEmpty()) {
             manageUIState(viewNumber = 0, list = null)
         } else {
             manageUIState(viewNumber = 2, list = eventState.list)
+            with(eventState.list){
+                this.let {
+                    if (this.isEmpty()) {
+                        if (viewModel.getLastVisiblePosition() <= this.size) {
+                            binding.userListLayout.rvUserList.smoothScrollToPosition(
+                                viewModel.getLastVisiblePosition()
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
     override fun observeViewModel(viewModel: UserViewModel) {
-        observeRemote()
-
+        observeUserList()
+        observePost()
+        observeUserAndTheirPost()
     }
 
-    private fun observeRemote() {
+    private fun observeUserList() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.usersTasksEvent.collect { eventState ->
                     when (eventState) {
 
-                        is UserViewModel.UserDataEvent.Loading -> {
+                        is UserDataEvent.Loading -> {
                             showLoading()
                         }
 
-                        is UserViewModel.UserDataEvent.Error -> {
+                        is UserDataEvent.Error -> {
                             hideLoading()
                             showToast(requireContext(), eventState.errorData.error.toString())
                             manageUIState(viewNumber = 1, list = null)
                         }
 
-                        UserViewModel.UserDataEvent.RemoteErrorByNetwork -> {
+                        UserDataEvent.RemoteErrorByNetwork -> {
                             //try to load from local DB....
                             hideLoading()
-                            showToast(requireContext(), "Checking from local data source")
+                            showToast(requireContext(), "fetch from local data source")
+                            viewModel.getUserAndTheirPosts()
                         }
 
-                        is UserViewModel.UserDataEvent.GetUserList -> {
+                        is UserDataEvent.GetUserList -> {
                             hideLoading()
-                            if (eventState.list.isEmpty()) manageUIState(
-                                viewNumber = 1,
-                                list = null
-                            )
-                            else inflateViewWithUserList(eventState)
+                            showToast(requireContext(), "Users Loaded...")
                         }
                     }
                 }
@@ -116,35 +136,62 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
         }
     }
 
-    private fun observeRemotePost() {
+    private fun observePost() {
         viewLifecycleOwner.lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.postsTasksEvent.collect { eventState ->
-                when (eventState) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postsTasksEvent.collect { eventState ->
+                    when (eventState) {
 
-                    is UserViewModel.PostDataEvent.Loading -> {
-                        showLoading()
-                    }
+                        is PostDataEvent.Loading -> {
+                            showLoading()
+                        }
 
-                    is UserViewModel.PostDataEvent.Error -> {
-                        hideLoading()
-                        showToast(requireContext(), eventState.errorData.error.toString())
-                    }
+                        is PostDataEvent.Error -> {
+                            hideLoading()
+                            showToast(requireContext(), eventState.errorData.error.toString())
+                        }
 
-                    UserViewModel.PostDataEvent.RemoteErrorByNetwork -> {
-                        //try to load from local DB....
-                        hideLoading()
-                        showToast(requireContext(), "Checking from local data source")
-                    }
+                        PostDataEvent.RemoteErrorByNetwork -> {
+                            //try to load from local DB....
+                            hideLoading()
+                            showToast(requireContext(), "fetch from local data source")
+                            viewModel.getUserAndTheirPosts()
+                        }
 
-                    is UserViewModel.PostDataEvent.GetPosts -> {
-                        hideLoading()
-                        showToast(requireContext(), "Data Loaded...${eventState.list}")
+                        is PostDataEvent.GetPosts -> {
+                            hideLoading()
+                            showToast(requireContext(), "Posts Loaded...")
+                        }
                     }
                 }
             }
         }
     }
+
+    private fun observeUserAndTheirPost() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userAndTheirPostTasksEvent.collect { eventState ->
+                    when (eventState) {
+                        is UserAndTheirPostEvent.Loading -> {
+                            showLoading()
+                        }
+                        is UserAndTheirPostEvent.Error -> {
+                            hideLoading()
+                            eventState.exception.message?.let { showToast(requireContext(), it) }
+                            manageUIState(viewNumber = 1, list = null)
+                        }
+                        is UserAndTheirPostEvent.UserWithTheirPosts -> {
+                            hideLoading()
+                            if (eventState.list.isEmpty())
+                                manageUIState(viewNumber = 1, list = null)
+                            else
+                                inflateViewWithUserList(eventState)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun hideLoading() {
@@ -153,6 +200,20 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
 
     private fun showLoading() {
         showDialog(mProgressDialog)
+    }
 
+    override fun onDestroyView() {
+        viewModel.setLastVisiblePosition(mLayoutManager.findLastCompletelyVisibleItemPosition())
+        super.onDestroyView()
+    }
+
+    override fun onPause() {
+        viewModel.setLastVisiblePosition(mLayoutManager.findLastCompletelyVisibleItemPosition())
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        viewModel.handleConfig( true)
+        super.onDestroy()
     }
 }

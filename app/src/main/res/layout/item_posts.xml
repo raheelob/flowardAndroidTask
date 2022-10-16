@@ -7,11 +7,11 @@
 
         <variable
             name="data"
-            type="com.floward.androidtask.data.response.model.UserAndTheirPostsData" />
+            type="com.floward.androidtask.data.response.model.UserPostsData" />
 
         <variable
-            name="userItemClickListener"
-            type="com.floward.androidtask.view.adapter.UserListAdapter.UserListItemClickListener" />
+            name="postItemClickListener"
+            type="com.floward.androidtask.view.adapter.PostsAdapter.PostsItemClickListener" />
 
         <variable
             name="position"
@@ -35,14 +35,14 @@
             android:background="#ffffff"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{()->userItemClickListener.onClick(data)}">
+            android:onClick="@{()->postItemClickListener.onClick(data)}">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/startGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".02" />
+                app:layout_constraintGuide_percent=".05" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/endGuideline"
@@ -54,20 +54,22 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivTopStory"
+                app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintStart_toStartOf="@+id/startGuideline"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tvTitle"
                     style="@style/TextAppearance.AppCompat.Title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="start|center_vertical"
                     android:maxLines="2"
-                    android:text="@{data.userData.name}"
+                    android:text="@{data.title}"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -76,30 +78,22 @@
                     tools:text="Title comes here..." />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvPostsCount"
+                    android:id="@+id/tvBodyCount"
                     style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="@{data.body}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:gravity="start|center_vertical"
                     android:maxLines="2"
-                    setUserCount="@{data.userPostsData.size()}"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvName"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                     tools:text="Title comes here..." />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivTopStory"
-                imagePath="@{data.userData.thumbnailUrl}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
