@@ -33,17 +33,17 @@ class UserViewModel @Inject constructor(
     //remote // users event...
     /***********************************************************************************/
     private val usersTasksEventChannel = Channel<UserDataEvent>()
-    val usersTasksEvent = usersTasksEventChannel.receiveAsFlow()
+    internal val usersTasksEvent = usersTasksEventChannel.receiveAsFlow()
     /***********************************************************************************/
     //remote // post event...
     /***********************************************************************************/
     private val postsTasksEventChannel = Channel<PostDataEvent>()
-    val postsTasksEvent = postsTasksEventChannel.receiveAsFlow()
+    internal val postsTasksEvent = postsTasksEventChannel.receiveAsFlow()
     /***********************************************************************************/
     //local // user and their posts...
     /***********************************************************************************/
     private val userAndTheirPostTasksEventChannel = Channel<UserAndTheirPostEvent>()
-    val userAndTheirPostTasksEvent = userAndTheirPostTasksEventChannel.receiveAsFlow()
+    internal val userAndTheirPostTasksEvent = userAndTheirPostTasksEventChannel.receiveAsFlow()
     /***********************************************************************************/
     init {
         getUserList()
@@ -55,28 +55,15 @@ class UserViewModel @Inject constructor(
         usersTasksEventChannel.send(UserDataEvent.Loading)
         userUseCase.execute(UserUseCase.Params(fetchLocal = false)).collect { response ->
             when (response) {
-                RemoteData.Loading -> {
-                    sendLoadingEvent()
+                RemoteData.Loading -> sendLoadingEvent()
+
+                is RemoteData.Success -> response.value.let {
+                    if (it.isNotEmpty()) getUserList(true) else getUserList(false)
                 }
 
-                is RemoteData.Success -> {
+                is RemoteData.RemoteErrorByNetwork -> sendRemoteErrorByNetworkEvent()
 
-                    response.value.let {
-                        if (it.isNotEmpty()) getUserList(true) else getUserList(false)
-                    }
-
-                    response.value.let {
-                        getPosts()
-                    }
-                }
-
-                is RemoteData.RemoteErrorByNetwork -> {
-                    sendRemoteErrorByNetworkEvent()
-                }
-
-                is RemoteData.Error -> {
-                    response.error?.let { sendErrorEvent(it) }
-                }
+                is RemoteData.Error -> response.error?.let { sendErrorEvent(it) }
             }
         }
     }
@@ -89,11 +76,11 @@ class UserViewModel @Inject constructor(
         usersTasksEventChannel.send(UserDataEvent.RemoteErrorByNetwork)
     }
 
-    suspend fun sendErrorEvent(errorData: ErrorData) {
+    internal suspend fun sendErrorEvent(errorData: ErrorData) {
         usersTasksEventChannel.send(UserDataEvent.Error(errorData))
     }
 
-    suspend fun getUserList(dataReceived: Boolean) {
+    internal suspend fun getUserList(dataReceived: Boolean) {
         if (dataReceived) {
             usersTasksEventChannel.send(UserDataEvent.GetUserList(dataReceived = dataReceived))
         } else
@@ -102,32 +89,19 @@ class UserViewModel @Inject constructor(
     /***********************************************************************************/
     //remote // posts event...
     /***********************************************************************************/
-    private fun getPosts() = viewModelScope.launch {
+    internal fun getPosts() = viewModelScope.launch {
         postsTasksEventChannel.send(PostDataEvent.Loading)
         userPostsUseCase.execute(UserPostsUseCase.Params()).collect { response ->
             when (response) {
-                RemoteData.Loading -> {
-                    sendPostsLoadingEvent()
+                RemoteData.Loading -> sendPostsLoadingEvent()
+
+                is RemoteData.Success -> response.value.let {
+                    if (it.isNotEmpty()) getPostsList(true) else getPostsList(false)
                 }
 
-                is RemoteData.Success -> {
+                is RemoteData.RemoteErrorByNetwork -> sendPostsRemoteErrorByNetworkEvent()
 
-                    response.value.let {
-                        if (it.isNotEmpty()) getPostsList(true) else getPostsList(false)
-                    }
-
-                    response.value.let {
-                        getUserAndTheirPosts()
-                    }
-                }
-
-                is RemoteData.RemoteErrorByNetwork -> {
-                    sendPostsRemoteErrorByNetworkEvent()
-                }
-
-                is RemoteData.Error -> {
-                    response.error?.let { sendPostsErrorEvent(it) }
-                }
+                is RemoteData.Error -> response.error?.let { sendPostsErrorEvent(it) }
             }
         }
     }
@@ -140,11 +114,11 @@ class UserViewModel @Inject constructor(
         postsTasksEventChannel.send(PostDataEvent.RemoteErrorByNetwork)
     }
 
-    suspend fun sendPostsErrorEvent(errorData: ErrorData) {
+    internal suspend fun sendPostsErrorEvent(errorData: ErrorData) {
         postsTasksEventChannel.send(PostDataEvent.Error(errorData))
     }
 
-    suspend fun getPostsList(dataReceived: Boolean) {
+    internal suspend fun getPostsList(dataReceived: Boolean) {
         if (dataReceived) {
             postsTasksEventChannel.send(PostDataEvent.GetPosts(true))
         } else
@@ -157,19 +131,13 @@ class UserViewModel @Inject constructor(
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.Loading)
         userAndTheirPostsUseCase.readDataFromDB().collect { response ->
             when (response) {
-                is LocalData.SuccessFulRead -> {
-                    response.value.let { userAndTheirPostsList ->
-                        retrieveList = userAndTheirPostsList
-                        getAllUsersAndTheirPostsList(userAndTheirPostsList)
-                    }
+                is LocalData.SuccessFulRead -> response.value.let { userAndTheirPostsList ->
+                    retrieveList = userAndTheirPostsList
+                    getAllUsersAndTheirPostsList(userAndTheirPostsList)
                 }
-                is LocalData.ErrorReading -> {
-                    sendUserAndTheirPostsErrorEvent(response.exception)
-                }
+                is LocalData.ErrorReading -> sendUserAndTheirPostsErrorEvent(response.exception)
 
-                is LocalData.Loading -> {
-                    sendUserAndTheirPostsLoadingEvent()
-                }
+                is LocalData.Loading -> sendUserAndTheirPostsLoadingEvent()
             }
         }
     }
@@ -178,27 +146,27 @@ class UserViewModel @Inject constructor(
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.Loading)
     }
 
-    suspend fun sendUserAndTheirPostsErrorEvent(ex: Exception) {
+    internal suspend fun sendUserAndTheirPostsErrorEvent(ex: Exception) {
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.Error(ex))
     }
 
-    suspend fun getAllUsersAndTheirPostsList(list: List<UserAndTheirPostsData>) {
+    internal  suspend fun getAllUsersAndTheirPostsList(list: List<UserAndTheirPostsData>) {
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.UserWithTheirPosts(list))
     }
     /***********************************************************************************/
-    fun setLastVisiblePosition(position :Int){
+    internal fun setLastVisiblePosition(position :Int){
         rvLastViewedPosition = position
     }
 
-    fun getLastVisiblePosition() = rvLastViewedPosition
+    internal fun getLastVisiblePosition() = rvLastViewedPosition
 
-    fun handleConfig(configMode: Boolean){
+    internal fun handleConfig(configMode: Boolean){
         isConfig = configMode
     }
 
-    fun getConfig() = isConfig
+    internal fun getConfig() = isConfig
 
-    fun retrieveList() = viewModelScope.launch {
+    internal fun retrieveList() = viewModelScope.launch {
         getAllUsersAndTheirPostsList(retrieveList)
     }
 }

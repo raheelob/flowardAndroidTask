@@ -10,4 +10,6 @@
 
     <color name="purple_7005">#DAD2F8</color>
     <color name="purple_2005">#E7E4EA</color>
+
+    <color name="app_bg">#EDEBEF</color>
 </resources>

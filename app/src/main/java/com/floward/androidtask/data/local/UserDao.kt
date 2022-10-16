@@ -10,17 +10,8 @@ interface UserDao {
     /*
     * crud for user data...
     * */
-    //Add a single user data...
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSingleUserData(data: UserData)
-
-    //Add a single user data...
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllUserData(list:List<UserData>)
-
-    // deletes single user data...
-    @Delete
-    suspend fun deleteSingleUserData(data: UserData)
+    suspend fun insertAllUserData(list: List<UserData>)
 
     //Get all the user data...
     @Query("Select * from UserData")
@@ -33,16 +24,9 @@ interface UserDao {
     /*
    * crud for user posts...
    * */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSingleUserPost(data: UserPostsData)
 
-    //Add a single user post...
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllUserPostsData(list:List<UserPostsData>)
-
-    // deletes single user post...
-    @Delete
-    suspend fun deleteSingleUserData(data: UserPostsData)
+    suspend fun insertAllUserPostsData(list: List<UserPostsData>)
 
     //Get all the user post...
     @Transaction

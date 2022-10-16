@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff">
+        android:background="@color/app_bg">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startGuideline"
@@ -34,10 +34,10 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:background="@color/purple_500"
             android:gravity="center_horizontal|center_vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="@string/user_list"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,18 +53,18 @@
             app:layout_constraintStart_toEndOf="@+id/startGuideline"
             app:layout_constraintTop_toBottomOf="@+id/appBarTitle">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvUserList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-            app:layout_constraintStart_toEndOf="@+id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/appBarTitle"
-            tools:listitem="@layout/item_user" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUserList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                app:layout_constraintStart_toEndOf="@+id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/appBarTitle"
+                tools:listitem="@layout/item_user" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

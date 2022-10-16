@@ -8,7 +8,11 @@ import com.floward.androidtask.databinding.FragmentPostsBinding
 import com.floward.androidtask.view.adapter.PostsAdapter
 import com.floward.androidtask.view.base.BaseFragment
 import com.floward.androidtask.view.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+private const val PARAMS_DATA = "Data"
+
+@AndroidEntryPoint
 class PostsFragment : BaseFragment<FragmentPostsBinding, UserViewModel>(
     FragmentPostsBinding::inflate
 ) {
@@ -22,7 +26,7 @@ class PostsFragment : BaseFragment<FragmentPostsBinding, UserViewModel>(
         initRecyclerView()
         initAdapter()
         arguments?.let {
-            data = it.getParcelable("Data")
+            data = it.getParcelable(PARAMS_DATA)
             binding.data = data
             data?.let { User ->
                 mAdapter.submitList(User.userPostsData)
@@ -35,20 +39,18 @@ class PostsFragment : BaseFragment<FragmentPostsBinding, UserViewModel>(
         binding.rvPostList.adapter = mAdapter
     }
 
-    private fun onPostItemClicked() = PostsAdapter.PostsItemClickListener {
-        it.let {
-
-        }
-    }
-
     private fun initAdapter() {
         mLayoutManager = LinearLayoutManager(requireContext())
         binding.rvPostList.layoutManager = mLayoutManager
         binding.rvPostList.adapter = mAdapter
     }
 
-    override fun observeViewModel(viewModel: UserViewModel) {
+    private fun onPostItemClicked() = PostsAdapter.PostsItemClickListener {
+        it.let {
+        }
     }
 
+    override fun observeViewModel(viewModel: UserViewModel) {
+    }
 
 }

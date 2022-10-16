@@ -9,7 +9,7 @@
         android:id="@+id/userListingFragment"
         android:name="com.floward.androidtask.view.fragment.UserListingFragment"
         android:label="fragment_user_listing"
-        tools:layout="@layout/fragment_user_listing" >
+        tools:layout="@layout/fragment_user_listing">
         <action
             android:id="@+id/action_userListingFragment_to_postsFragment"
             app:destination="@id/postsFragment"
@@ -23,6 +23,7 @@
                 app:nullable="true" />
         </action>
     </fragment>
+
     <fragment
         android:id="@+id/postsFragment"
         android:name="com.floward.androidtask.view.fragment.PostsFragment"

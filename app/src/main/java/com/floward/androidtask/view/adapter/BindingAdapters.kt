@@ -19,6 +19,19 @@ object BindingAdapters {
         }
     }
 
+    @BindingAdapter("imagePathCircleCrop")
+    @JvmStatic
+    fun imagePathCircleCrop(appCompatImageView: AppCompatImageView, url: String?) {
+        url?.let {
+            Glide
+                .with(appCompatImageView.context)
+                .load(it)
+                .circleCrop()
+                .placeholder(R.drawable.placeholder_image)
+                .into(appCompatImageView)
+        }
+    }
+
     @BindingAdapter("setUserCount")
     @JvmStatic
     fun setUserCount(appCompatTextView: AppCompatTextView, count: Int?) {

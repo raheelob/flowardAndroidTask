@@ -129,6 +129,9 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
                         is UserDataEvent.GetUserList -> {
                             hideLoading()
                             showToast(requireContext(), "Users Loaded...")
+                            if(eventState.dataReceived){
+                                viewModel.getPosts() // Without user list, user posts are not required..
+                            }
                         }
                     }
                 }
@@ -161,6 +164,9 @@ class UserListingFragment : BaseFragment<FragmentUserListingBinding, UserViewMod
                         is PostDataEvent.GetPosts -> {
                             hideLoading()
                             showToast(requireContext(), "Posts Loaded...")
+                            if(eventState.dataReceived){
+                                viewModel.getUserAndTheirPosts() // Now fetch the data from local DB...
+                            }
                         }
                     }
                 }

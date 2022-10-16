@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent=".02" />
+                app:layout_constraintGuide_percent=".03" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/endGuideline"
@@ -53,10 +53,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
+                android:layout_marginStart="10dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivTopStory"
-                app:layout_constraintStart_toStartOf="@+id/startGuideline"
+                app:layout_constraintStart_toEndOf="@+id/ivUserThumbnail"
+                app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -94,11 +95,14 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivTopStory"
-                imagePath="@{data.userData.thumbnailUrl}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/ivUserThumbnail"
+                imagePathCircleCrop="@{data.userData.thumbnailUrl}"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintStart_toEndOf="@+id/startGuideline"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
