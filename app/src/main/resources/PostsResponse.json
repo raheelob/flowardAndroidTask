@@ -1,0 +1,72 @@
+[
+  {
+    "albumId": 1,
+    "userId": 1,
+    "name": "User 1",
+    "url": "https://dummyimage.com/600/92c952&text=User+1",
+    "thumbnailUrl": "https://dummyimage.com/150/92c952&text=User+1"
+  },
+  {
+    "albumId": 1,
+    "userId": 2,
+    "name": "User 2",
+    "url": "https://dummyimage.com/600/771796&text=User+2",
+    "thumbnailUrl": "https://dummyimage.com/150/771796&text=User+2"
+  },
+  {
+    "albumId": 1,
+    "userId": 3,
+    "name": "User 3",
+    "url": "https://dummyimage.com/600/24f355&text=User+3",
+    "thumbnailUrl": "https://dummyimage.com/150/24f355&text=User+3"
+  },
+  {
+    "albumId": 1,
+    "userId": 4,
+    "name": "User 4",
+    "url": "https://dummyimage.com/600/d32776&text=User+4",
+    "thumbnailUrl": "https://dummyimage.com/150/d32776&text=User+4"
+  },
+  {
+    "albumId": 1,
+    "userId": 5,
+    "name": "User 5",
+    "url": "https://dummyimage.com/600/f66b97&text=User+5",
+    "thumbnailUrl": "https://dummyimage.com/150/f66b97&text=User+5"
+  },
+  {
+    "albumId": 1,
+    "userId": 6,
+    "name": "User 6",
+    "url": "https://dummyimage.com/600/56a8c2&text=User+6",
+    "thumbnailUrl": "https://dummyimage.com/150/56a8c2&text=User+6"
+  },
+  {
+    "albumId": 1,
+    "userId": 7,
+    "name": "User 7",
+    "url": "https://dummyimage.com/600/b0f7cc&text=User+7",
+    "thumbnailUrl": "https://dummyimage.com/150/b0f7cc&text=User+7"
+  },
+  {
+    "albumId": 1,
+    "userId": 8,
+    "name": "User 8",
+    "url": "https://dummyimage.com/600/54176f&text=User+8",
+    "thumbnailUrl": "https://dummyimage.com/150/54176f&text=User+8"
+  },
+  {
+    "albumId": 1,
+    "userId": 9,
+    "name": "User 9",
+    "url": "https://dummyimage.com/600/51aa97&text=User+9",
+    "thumbnailUrl": "https://dummyimage.com/150/51aa97&text=User+9"
+  },
+  {
+    "albumId": 1,
+    "userId": 10,
+    "name": "User 10",
+    "url": "https://dummyimage.com/600/810b14&text=User+10",
+    "thumbnailUrl": "https://dummyimage.com/150/810b14&text=User+10"
+  }
+]
