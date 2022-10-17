@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.floward.androidtask.data.response.model.UserAndTheirPostsData
-import com.floward.androidtask.data.response.model.UserData
 import com.floward.androidtask.databinding.ItemUserBinding
 
 class UserListAdapter(private val mUserItemClickListener: UserListItemClickListener) :

@@ -9,8 +9,6 @@ import com.floward.androidtask.data.events.UserAndTheirPostEvent
 import com.floward.androidtask.data.events.UserDataEvent
 import com.floward.androidtask.data.response.model.ErrorData
 import com.floward.androidtask.data.response.model.UserAndTheirPostsData
-import com.floward.androidtask.data.response.model.UserData
-import com.floward.androidtask.data.response.model.UserPostsData
 import com.floward.androidtask.view.usecase.UserAndTheirPostsUseCase
 import com.floward.androidtask.view.usecase.UserPostsUseCase
 import com.floward.androidtask.view.usecase.UserUseCase
@@ -27,8 +25,8 @@ class UserViewModel @Inject constructor(
     private val userPostsUseCase: UserPostsUseCase,
     private val userAndTheirPostsUseCase: UserAndTheirPostsUseCase
 ) : ViewModel() {
-    var retrieveList:List<UserAndTheirPostsData> = emptyList()
-    var rvLastViewedPosition : Int = 0
+    private var retrieveList:List<UserAndTheirPostsData> = emptyList()
+    private var rvLastViewedPosition : Int = 0
     private var isConfig: Boolean = false
     //remote // users event...
     /***********************************************************************************/
@@ -51,14 +49,14 @@ class UserViewModel @Inject constructor(
     /***********************************************************************************/
     //remote // users event...
     /***********************************************************************************/
-    fun getUserList() = viewModelScope.launch {
+     fun getUserList() = viewModelScope.launch {
         usersTasksEventChannel.send(UserDataEvent.Loading)
-        userUseCase.execute(UserUseCase.Params(fetchLocal = false)).collect { response ->
+        userUseCase.execute(UserUseCase.Params()).collect { response ->
             when (response) {
                 RemoteData.Loading -> sendLoadingEvent()
 
                 is RemoteData.Success -> response.value.let {
-                    if (it.isNotEmpty()) getUserList(true) else getUserList(false)
+                    if (it.isNotEmpty()) getUserListEvent(true) else getUserListEvent(false)
                 }
 
                 is RemoteData.RemoteErrorByNetwork -> sendRemoteErrorByNetworkEvent()
@@ -80,7 +78,7 @@ class UserViewModel @Inject constructor(
         usersTasksEventChannel.send(UserDataEvent.Error(errorData))
     }
 
-    internal suspend fun getUserList(dataReceived: Boolean) {
+    internal suspend fun getUserListEvent(dataReceived: Boolean) {
         if (dataReceived) {
             usersTasksEventChannel.send(UserDataEvent.GetUserList(dataReceived = dataReceived))
         } else
@@ -127,7 +125,7 @@ class UserViewModel @Inject constructor(
     /***********************************************************************************/
     //local // user and their posts...
     /***********************************************************************************/
-    fun getUserAndTheirPosts() = viewModelScope.launch {
+    internal fun getUserAndTheirPosts() = viewModelScope.launch {
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.Loading)
         userAndTheirPostsUseCase.readDataFromDB().collect { response ->
             when (response) {
@@ -150,9 +148,11 @@ class UserViewModel @Inject constructor(
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.Error(ex))
     }
 
-    internal  suspend fun getAllUsersAndTheirPostsList(list: List<UserAndTheirPostsData>) {
+    internal suspend fun getAllUsersAndTheirPostsList(list: List<UserAndTheirPostsData>) {
         userAndTheirPostTasksEventChannel.send(UserAndTheirPostEvent.UserWithTheirPosts(list))
     }
+    /***********************************************************************************/
+    //Configuration handling logic...
     /***********************************************************************************/
     internal fun setLastVisiblePosition(position :Int){
         rvLastViewedPosition = position
@@ -169,4 +169,5 @@ class UserViewModel @Inject constructor(
     internal fun retrieveList() = viewModelScope.launch {
         getAllUsersAndTheirPostsList(retrieveList)
     }
+    /***********************************************************************************/
 }

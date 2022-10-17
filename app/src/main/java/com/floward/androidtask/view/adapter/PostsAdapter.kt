@@ -5,11 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.floward.androidtask.data.response.model.UserAndTheirPostsData
-import com.floward.androidtask.data.response.model.UserData
 import com.floward.androidtask.data.response.model.UserPostsData
 import com.floward.androidtask.databinding.ItemPostsBinding
-import com.floward.androidtask.databinding.ItemUserBinding
 
 class PostsAdapter(private val mPostsItemClickListener: PostsItemClickListener) :
     ListAdapter<UserPostsData, RecyclerView.ViewHolder>(Companion) {

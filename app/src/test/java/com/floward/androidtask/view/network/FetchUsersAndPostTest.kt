@@ -1,6 +1,5 @@
 package com.floward.androidtask.view.network
 
-import com.floward.androidtask.BuildConfig
 import com.floward.androidtask.data.api.APIsCollection
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.runBlocking

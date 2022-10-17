@@ -27,6 +27,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     }
 
     abstract fun initView(binding: VB, savedInstanceState: Bundle?)
+
     abstract fun observeViewModel(viewModel: VM)
 
     protected fun isBindingInitialized() = ::binding.isInitialized

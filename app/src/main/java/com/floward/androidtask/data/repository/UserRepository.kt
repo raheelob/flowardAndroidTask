@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 interface UserRepository {
-    fun getUserList(fetchLocal: Boolean): Flow<RemoteData<List<UserData>>>
+    fun getUserList(): Flow<RemoteData<List<UserData>>>
     fun getAllPosts() : Flow<RemoteData<List<UserPostsData>>>
     fun getUserAndTheirPost() : Flow<LocalData<List<UserAndTheirPostsData>>>
 }

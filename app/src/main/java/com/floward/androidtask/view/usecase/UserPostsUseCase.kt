@@ -1,6 +1,5 @@
 package com.floward.androidtask.view.usecase
 
-import com.floward.androidtask.data.api.LocalData
 import com.floward.androidtask.data.api.RemoteData
 import com.floward.androidtask.data.api.UseCaseExecutor
 import com.floward.androidtask.data.repository.UserRepository

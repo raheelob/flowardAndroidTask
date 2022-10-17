@@ -10,18 +10,8 @@ import javax.inject.Inject
 class UserUseCase @Inject constructor(private val userRepository: UserRepository) :
     UseCaseExecutor<UserUseCase.Params, List<UserData>>() {
     override fun runUseCase(parameter: Params?): Flow<RemoteData<List<UserData>>> {
-        return userRepository.getUserList(
-            fetchLocal = parameter?.fetchLocal ?: false
-        )
+        return userRepository.getUserList()
     }
 
-    data class Params constructor(
-        val fetchLocal: Boolean?,
-    ) {
-        companion object {
-            fun create(
-                fetchLocal: Boolean?,
-            ) = Params(fetchLocal = fetchLocal)
-        }
-    }
+    class Params {}
 }

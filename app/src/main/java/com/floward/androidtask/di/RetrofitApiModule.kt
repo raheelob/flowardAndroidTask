@@ -1,6 +1,5 @@
 package com.floward.androidtask.di
 
-
 import com.floward.androidtask.BuildConfig
 import com.floward.androidtask.data.api.APIsCollection
 import dagger.Module
